@@ -11,6 +11,7 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import { Route, Routes } from "react-router-dom";
 import Register from "./Register";
+import Login from "./Login";
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -179,11 +180,16 @@ function App() {
                 <Register />
               </>
             }
-          ></Route>
-          <Route parh="/sign-in">
-            <Header text="Регистрация" />
-            <Register />
-          </Route>
+          />
+          <Route
+            path="/sign-in"
+            element={
+              <>
+                <Header text="Регистрация" />
+                <Login />
+              </>
+            }
+          />
         </Routes>
       </CurrentUserContext.Provider>
     </div>
