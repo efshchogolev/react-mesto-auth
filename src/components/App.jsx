@@ -10,6 +10,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import { Route, Routes } from "react-router-dom";
+import Register from "./Register";
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -127,12 +128,12 @@ function App() {
   return (
     <div className="root">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
         <Routes>
           <Route
             path="/"
             element={
               <>
+                <Header />
                 <Main
                   cards={cards}
                   onCardLike={handleCardLike}
@@ -142,6 +143,7 @@ function App() {
                   onAddPlace={handleAddPlaceClick}
                   onEditAvatar={handleEditAvatarClick}
                 />
+                <Footer />
                 <EditProfilePopup
                   onUpdateUser={handleUpdateUser}
                   isOpen={isEditProfilePopupOpen}
@@ -169,10 +171,20 @@ function App() {
               </>
             }
           ></Route>
-          <Route path="/sign-up"></Route>
-          <Route parh="/sign-in"></Route>
+          <Route
+            path="/sign-up"
+            element={
+              <>
+                <Header text="Войти" />
+                <Register />
+              </>
+            }
+          ></Route>
+          <Route parh="/sign-in">
+            <Header text="Регистрация" />
+            <Register />
+          </Route>
         </Routes>
-        <Footer />
       </CurrentUserContext.Provider>
     </div>
   );

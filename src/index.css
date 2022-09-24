@@ -57,3 +57,12 @@
 @import url(./blocks/popup/__input/_avatar/popup__input_avatar.css);
 @import url(./blocks/popup/__container/_avatar/popup__container_avatar.css);
 @import url(./blocks/popup/__submit-button/_avatar/popup__submit-button_avatar.css);
+
+@import url(./blocks/auth/auth.css);
+@import url(./blocks/auth/__title/auth__title.css);
+@import url(./blocks/auth/__form/auth__form.css);
+@import url(./blocks/auth/__input/auth__input.css);
+@import url(./blocks/auth/__input/_password/auth__input_password.css);
+@import url(./blocks/auth/__input/_email/auth__input_email.css);
+@import url(./blocks/auth/__button/auth__button.css);
+@import url(./blocks/auth/__entrance/auth__entrance.css);
