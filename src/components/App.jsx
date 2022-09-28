@@ -12,6 +12,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import { Route, Routes } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -19,6 +20,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  // const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
@@ -33,6 +35,10 @@ function App() {
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   };
+
+  // const handleSeccessPopupOpen = () => {
+  //   setIsSuccessPopupOpen(true)
+  // }
 
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(false);
@@ -178,6 +184,8 @@ function App() {
               <>
                 <Header text="Войти" />
                 <Register />
+                <InfoTooltip />
+                {/* text={} imgPath={} */}
               </>
             }
           />
@@ -187,6 +195,7 @@ function App() {
               <>
                 <Header text="Регистрация" />
                 <Login />
+                <InfoTooltip />
               </>
             }
           />
