@@ -9,7 +9,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
@@ -28,16 +28,17 @@ function App() {
   const navigate = useNavigate();
 
   const handleLogin = (email, password) => {
-    api.authorize(email, password).then((data) => {
+    return api.authorize(email, password).then((data) => {
       if (!data.jwt) {
         return Promise.reject("No data ");
       }
+      localStorage.setItem("jwt", data.jwt);
       setLoggedIn(true);
     });
   };
 
   const handleRegister = (email, password) => {
-    api.register(email, password).then(() => {
+    return api.register(email, password).then(() => {
       navigate("/sign-up");
     });
   };
@@ -133,6 +134,11 @@ function App() {
     handleTokenCheck();
   }, []);
 
+  useEffect(() => {
+    if (!loggedIn) return;
+    navigate("/");
+  }, [loggedIn]);
+
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
@@ -217,7 +223,13 @@ function App() {
             path="/sign-up"
             element={
               <>
-                <Header text="Войти" />
+                <Header
+                  text={
+                    <p className="header__text">
+                      <Link to="/sign-in">Войти</Link>
+                    </p>
+                  }
+                />
                 <Register onRegister={handleRegister} />
                 <InfoTooltip />
                 {/* text={} imgPath={} */}
@@ -228,7 +240,13 @@ function App() {
             path="/sign-in"
             element={
               <>
-                <Header text="Регистрация" />
+                <Header
+                  text={
+                    <p className="header__text">
+                      <Link to="/sign-up">Зарегистрироваться</Link>
+                    </p>
+                  }
+                />
                 <Login onLogin={handleLogin} />
                 <InfoTooltip />
               </>

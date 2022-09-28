@@ -17,18 +17,13 @@ function Login(props) {
 
     if (!email || !password) return;
 
-    props
-      .onLogin(email, password)
-      .then(() => {
-        setState(INIT_VALUES);
-      })
-      .catch((err) => {
-        console.log(err);
-        setState((old) => ({
-          ...old,
-          message: "Что-то пошло не так!",
-        }));
-      });
+    props.onLogin(email, password).catch((err) => {
+      console.log(err);
+      setState((old) => ({
+        ...old,
+        message: "Что-то пошло не так!",
+      }));
+    });
   };
 
   return (

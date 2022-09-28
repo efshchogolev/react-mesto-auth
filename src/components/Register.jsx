@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Register(props) {
   const [state, setState] = useState({ email: "", password: "", message: "" });
@@ -43,7 +44,11 @@ function Register(props) {
           onChange={handleChange}
         />
         <button className="auth__button">Зарегистрироваться</button>
-        <p className="auth__entrance">Уже зарегистрированы? Войти</p>
+        <p className="auth__entrance">
+          <Link className="auth__link" to="../sign-in">
+            Уже зарегистрированы? Войти
+          </Link>
+        </p>
       </form>
     </div>
   );
