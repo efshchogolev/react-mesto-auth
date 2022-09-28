@@ -1,10 +1,22 @@
 class Api {
-  constructor(host, token) {
+  constructor(host, token, baseUrl) {
     this._host = host;
     this._token = token;
+    this._baseUrl = baseUrl;
 
     this._getJsonOrError = this._getJsonOrError.bind(this);
     this._getHeaders = this._getHeaders.bind(this);
+  }
+
+  _getRequest({ url, method = "POST", token, data }) {
+    return fetch(`${this._baseUrl}${url}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(!!token && { Authorization: `Bearer ${token}` }),
+      },
+      ...(!!data && { body: JSON.stringify(data) }),
+    }).then(this._getJsonOrError);
   }
 
   _getJsonOrError(res) {
@@ -19,6 +31,18 @@ class Api {
       authorization: this._token,
       "content-type": "application/json",
     };
+  }
+
+  register(password, email) {
+    return this._getRequest({ url: "/signup", data: { password, email } });
+  }
+
+  authorize(password, email) {
+    return this._getRequest({ url: "/signin", data: { password, email } });
+  }
+
+  getcontent(token) {
+    return this._getRequest({ url: "/users/me", method: "GET", token });
   }
 
   getCards() {
@@ -89,7 +113,8 @@ class Api {
 
 const api = new Api(
   "https://mesto.nomoreparties.co/v1/cohort-47",
-  "ad5a4fe9-6249-4900-9757-39fd298866ec"
+  "ad5a4fe9-6249-4900-9757-39fd298866ec",
+  "https://auth.nomoreparties.co"
 );
 
 export default api;
