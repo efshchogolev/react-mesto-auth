@@ -41,7 +41,7 @@ class Api {
     return this._getRequest({ url: "/signin", data: { password, email } });
   }
 
-  getcontent(token) {
+  getContent(token) {
     return this._getRequest({ url: "/users/me", method: "GET", token });
   }
 

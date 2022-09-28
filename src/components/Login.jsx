@@ -34,7 +34,7 @@ function Login(props) {
   return (
     <div className="auth">
       <h1 className="auth__title">Вход</h1>
-      <form className="auth__form">
+      <form className="auth__form" onSubmit={handleSubmit}>
         <input
           className="auth__input auth__input_email"
           placeholder="Email"

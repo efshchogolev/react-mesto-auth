@@ -9,12 +9,14 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -23,6 +25,35 @@ function App() {
   // const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = (email, password) => {
+    api.authorize(email, password).then((data) => {
+      if (!data.jwt) {
+        return Promise.reject("No data ");
+      }
+      setLoggedIn(true);
+    });
+  };
+
+  const handleRegister = (email, password) => {
+    api.register(email, password).then(() => {
+      navigate("/sign-up");
+    });
+  };
+
+  const handleTokenCheck = () => {
+    if (!localStorage.getItem("jwt")) return;
+    const jwt = localStorage.getItem("jwt");
+    api.getContent(jwt).then((res) => {
+      if (res) {
+        const userEmail = res.email;
+        setLoggedIn(true);
+        setEmail(userEmail);
+        navigate("/");
+      }
+    });
+  };
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -96,6 +127,10 @@ function App() {
         );
       })
       .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    handleTokenCheck();
   }, []);
 
   function handleCardLike(card) {
@@ -183,7 +218,7 @@ function App() {
             element={
               <>
                 <Header text="Войти" />
-                <Register />
+                <Register onRegister={handleRegister} />
                 <InfoTooltip />
                 {/* text={} imgPath={} */}
               </>
@@ -194,7 +229,7 @@ function App() {
             element={
               <>
                 <Header text="Регистрация" />
-                <Login />
+                <Login onLogin={handleLogin} />
                 <InfoTooltip />
               </>
             }
