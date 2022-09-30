@@ -1,15 +1,26 @@
-function InfoTooltip({ name, isOpen, onClose, text, imgPath }) {
+import successPath from "../images/Success.png";
+import failurePath from "../images/Failure.png";
+
+function InfoTooltip({ isOpen, onClose, success }) {
   const className = `${isOpen ? "popup_isOpen" : ""}`;
   return (
-    <div className={`popup ${className}`} id={`popup_${name}`}>
-      <div className="popup__container">
+    <div className={`popup ${className}`} id={`popup_info`}>
+      <div className="popup__container popup__container_register">
         <button
           className="popup__close-button"
-          id={`close_${name}`}
+          // id={`close_${success ? 'success'}`}
           onClick={onClose}
         ></button>
-        <img src={imgPath} />
-        <h2 className="popup__title">{text}</h2>
+        <img
+          src={`${success ? `${successPath}` : `${failurePath}`}`}
+          alt="Сообщение"
+          className="popup__info-image"
+        />
+        <h2 className="popup__title popup__title_register">{`${
+          success
+            ? "Вы успешно зарегестрировались!"
+            : "Что-то не так! Попробуйте ещё раз!"
+        }`}</h2>
       </div>
     </div>
   );

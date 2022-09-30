@@ -16,6 +16,7 @@ import InfoTooltip from "./InfoTooltip";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
+  const [registerPopupStatus, setRegisterPopupStatus] = useState(null);
   const [email, setEmail] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [cards, setCards] = useState([]);
@@ -23,9 +24,10 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
   // const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  // const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = (email, password) => {
@@ -48,17 +50,9 @@ function App() {
     });
   };
 
-  const handleTokenCheck = () => {
-    if (!localStorage.getItem("jwt")) return;
-    const jwt = localStorage.getItem("jwt");
-    api.getContent(jwt).then((res) => {
-      if (res) {
-        const userEmail = res.data.email;
-        setLoggedIn(true);
-        setEmail(userEmail);
-        navigate("/");
-      }
-    });
+  const handleOpenRegisterPopup = (isSuccess) => {
+    setIsRegisterPopupOpen(true);
+    setRegisterPopupStatus(isSuccess);
   };
 
   const handleEditAvatarClick = () => {
@@ -81,8 +75,9 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard({ name: "", link: "" });
-    setIsDeletePopupOpen(false);
+    // setSelectedCard({ name: "", link: "" })///////////////////;
+    setIsRegisterPopupOpen(false);
+    // setIsDeletePopupOpen(false);
   };
 
   const handleCardClick = (card) => {
@@ -136,6 +131,18 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const handleTokenCheck = () => {
+      if (!localStorage.getItem("jwt")) return;
+      const jwt = localStorage.getItem("jwt");
+      api.getContent(jwt).then((res) => {
+        if (res) {
+          const userEmail = res.data.email;
+          setLoggedIn(true);
+          setEmail(userEmail);
+          navigate("/");
+        }
+      });
+    };
     handleTokenCheck();
   }, []);
 
@@ -248,8 +255,15 @@ function App() {
                     </Link>
                   </p>{" "}
                 </Header>
-                <Register onRegister={handleRegister} />
-                <InfoTooltip />
+                <Register
+                  onRegister={handleRegister}
+                  onOpenPopup={handleOpenRegisterPopup}
+                />
+                <InfoTooltip
+                  isOpen={isRegisterPopupOpen}
+                  onClose={closeAllPopups}
+                  success={registerPopupStatus}
+                />
                 {/* text={} imgPath={} */}
               </>
             }
@@ -266,7 +280,6 @@ function App() {
                   </p>
                 </Header>
                 <Login onLogin={handleLogin} />
-                <InfoTooltip />
               </>
             }
           />

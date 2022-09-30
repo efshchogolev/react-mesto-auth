@@ -15,13 +15,16 @@ function Register(props) {
     e.preventDefault();
     const { email, password } = state;
 
-    props.onRegister(email, password).catch((err) => {
-      console.log(err);
-      setState((old) => ({
-        ...old,
-        message: "Что-то пошло не так!",
-      }));
-    });
+    props
+      .onRegister(email, password)
+      .then(props.onOpenPopup(true))
+      .catch((err) => {
+        console.log(err);
+        setState((old) => ({
+          ...old,
+          message: "Что-то пошло не так!",
+        }));
+      });
   };
 
   return (

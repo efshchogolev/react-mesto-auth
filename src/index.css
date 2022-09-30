@@ -62,6 +62,10 @@
 @import url(./blocks/popup/__container/_avatar/popup__container_avatar.css);
 @import url(./blocks/popup/__submit-button/_avatar/popup__submit-button_avatar.css);
 
+@import url(./blocks/popup/__info-image/popup__info-image.css);
+@import url(./blocks/popup/__container/_register/popup__container_register.css);
+@import url(./blocks/popup/__title/_register/popup__title_register.css);
+
 @import url(./blocks/auth/auth.css);
 @import url(./blocks/auth/__title/auth__title.css);
 @import url(./blocks/auth/__form/auth__form.css);
