@@ -13,6 +13,7 @@ import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -29,12 +30,16 @@ function App() {
 
   const handleLogin = (email, password) => {
     return api.authorize(email, password).then((data) => {
-      if (!data.jwt) {
+      if (!data.token) {
         return Promise.reject("No data ");
       }
-      localStorage.setItem("jwt", data.jwt);
+      localStorage.setItem("jwt", data.token);
       setLoggedIn(true);
     });
+  };
+  const handleLogout = () => {
+    localStorage.setItem("jwt", null);
+    setLoggedIn(false);
   };
 
   const handleRegister = (email, password) => {
@@ -48,7 +53,7 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     api.getContent(jwt).then((res) => {
       if (res) {
-        const userEmail = res.email;
+        const userEmail = res.data.email;
         setLoggedIn(true);
         setEmail(userEmail);
         navigate("/");
@@ -177,61 +182,72 @@ function App() {
     <div className="root">
       <CurrentUserContext.Provider value={currentUser}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Header />
-                <Main
-                  cards={cards}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete}
-                  onCardClick={handleCardClick}
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={handleAddPlaceClick}
-                  onEditAvatar={handleEditAvatarClick}
-                />
-                <Footer />
-                <EditProfilePopup
-                  onUpdateUser={handleUpdateUser}
-                  isOpen={isEditProfilePopupOpen}
-                  onClose={closeAllPopups}
-                />
-                <AddPlacePopup
-                  isOpen={isAddPlacePopupOpen}
-                  onClose={closeAllPopups}
-                  onAddCard={handleAddPlaceSubmit}
-                />
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Header>
+                    <div className="header__container">
+                      <p className="header__email">{email}</p>
+                      <p
+                        className="header__text header__text_exit"
+                        onClick={handleLogout}
+                      >
+                        Выйти
+                      </p>
+                    </div>
+                  </Header>
+                  <Main
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                    onCardClick={handleCardClick}
+                    onEditProfile={handleEditProfileClick}
+                    onAddPlace={handleAddPlaceClick}
+                    onEditAvatar={handleEditAvatarClick}
+                  />
+                  <Footer />
+                  <EditProfilePopup
+                    onUpdateUser={handleUpdateUser}
+                    isOpen={isEditProfilePopupOpen}
+                    onClose={closeAllPopups}
+                  />
+                  <AddPlacePopup
+                    isOpen={isAddPlacePopupOpen}
+                    onClose={closeAllPopups}
+                    onAddCard={handleAddPlaceSubmit}
+                  />
 
-                <EditAvatarPopup
-                  isOpen={isEditAvatarPopupOpen}
-                  onClose={closeAllPopups}
-                  onUpdateAvatar={handleUpdateAvatar}
-                />
+                  <EditAvatarPopup
+                    isOpen={isEditAvatarPopupOpen}
+                    onClose={closeAllPopups}
+                    onUpdateAvatar={handleUpdateAvatar}
+                  />
 
-                <PopupWithForm
-                  title="Вы уверены?"
-                  name="delete"
-                  buttonText="Да"
-                  onClose={closeAllPopups}
-                />
-                <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-              </>
-            }
-          ></Route>
+                  <PopupWithForm
+                    title="Вы уверены?"
+                    name="delete"
+                    buttonText="Да"
+                    onClose={closeAllPopups}
+                  />
+                  <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+                </>
+              }
+            ></Route>
+          </Route>
+
           <Route
             path="/sign-up"
             element={
               <>
-                <Header
-                  text={
-                    <p className="header__text">
-                      <Link to="/sign-in" className="header__link">
-                        Войти
-                      </Link>
-                    </p>
-                  }
-                />
+                <Header>
+                  <p className="header__text">
+                    <Link to="/sign-in" className="header__link">
+                      Войти
+                    </Link>
+                  </p>{" "}
+                </Header>
                 <Register onRegister={handleRegister} />
                 <InfoTooltip />
                 {/* text={} imgPath={} */}
@@ -242,15 +258,13 @@ function App() {
             path="/sign-in"
             element={
               <>
-                <Header
-                  text={
-                    <p className="header__text">
-                      <Link to="/sign-up" className="header__link">
-                        Зарегистрироваться
-                      </Link>
-                    </p>
-                  }
-                />
+                <Header>
+                  <p className="header__text">
+                    <Link to="/sign-up" className="header__link">
+                      Зарегистрироваться
+                    </Link>
+                  </p>
+                </Header>
                 <Login onLogin={handleLogin} />
                 <InfoTooltip />
               </>

@@ -1,5 +1,6 @@
 .header__text {
   color: #fff;
   display: block;
-  margin: 0;
+  margin: auto 0 auto 24px;
+  cursor: pointer;
 }
