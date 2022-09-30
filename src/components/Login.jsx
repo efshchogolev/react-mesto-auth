@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function Login(props) {
-  const INIT_VALUES = { email: "", password: "", message: "" };
+  const INIT_VALUES = { email: "", password: "" };
   const [state, setState] = useState(INIT_VALUES);
 
   const handleChange = (e) => {
@@ -19,10 +19,6 @@ function Login(props) {
 
     props.onLogin(email, password).catch((err) => {
       console.log(err);
-      setState((old) => ({
-        ...old,
-        message: "Что-то пошло не так!",
-      }));
     });
   };
 

@@ -40,7 +40,7 @@ function App() {
     });
   };
   const handleLogout = () => {
-    localStorage.setItem("jwt", null);
+    localStorage.removeItem("jwt");
     setLoggedIn(false);
   };
 
@@ -136,9 +136,8 @@ function App() {
       const jwt = localStorage.getItem("jwt");
       api.getContent(jwt).then((res) => {
         if (res) {
-          const userEmail = res.data.email;
+          setEmail(res.data.email);
           setLoggedIn(true);
-          setEmail(userEmail);
           navigate("/");
         }
       });
@@ -271,7 +270,7 @@ function App() {
                 <Header>
                   <p className="header__text">
                     <Link to="/sign-up" className="header__link">
-                      Зарегистрироваться
+                      Регистрация
                     </Link>
                   </p>
                 </Header>

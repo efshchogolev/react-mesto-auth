@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Register(props) {
-  const [state, setState] = useState({ email: "", password: "", message: "" });
+  const [state, setState] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,13 +17,10 @@ function Register(props) {
 
     props
       .onRegister(email, password)
-      .then(props.onOpenPopup(false))
+      .then(props.onOpenPopup(true))
       .catch((err) => {
+        props.onOpenPopup(false);
         console.log(err);
-        setState((old) => ({
-          ...old,
-          message: "Что-то пошло не так!",
-        }));
       });
   };
 
