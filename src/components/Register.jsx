@@ -17,7 +17,7 @@ function Register(props) {
 
     props
       .onRegister(email, password)
-      .then(props.onOpenPopup(true))
+      .then(props.onOpenPopup(false))
       .catch((err) => {
         console.log(err);
         setState((old) => ({

@@ -3,4 +3,9 @@
   display: block;
   margin: auto 0 auto 24px;
   cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.header__text:hover {
+  opacity: 0.6;
 }

@@ -19,7 +19,7 @@ function InfoTooltip({ isOpen, onClose, success }) {
         <h2 className="popup__title popup__title_register">{`${
           success
             ? "Вы успешно зарегестрировались!"
-            : "Что-то не так! Попробуйте ещё раз!"
+            : "Что-то пошло не так! Попробуйте ещё раз!"
         }`}</h2>
       </div>
     </div>

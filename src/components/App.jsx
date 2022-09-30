@@ -197,10 +197,7 @@ function App() {
                   <Header>
                     <div className="header__container">
                       <p className="header__email">{email}</p>
-                      <p
-                        className="header__text header__text_exit"
-                        onClick={handleLogout}
-                      >
+                      <p className="header__text" onClick={handleLogout}>
                         Выйти
                       </p>
                     </div>
@@ -264,7 +261,6 @@ function App() {
                   onClose={closeAllPopups}
                   success={registerPopupStatus}
                 />
-                {/* text={} imgPath={} */}
               </>
             }
           />
