@@ -226,7 +226,9 @@ function App() {
                 <Header
                   text={
                     <p className="header__text">
-                      <Link to="/sign-in">Войти</Link>
+                      <Link to="/sign-in" className="header__link">
+                        Войти
+                      </Link>
                     </p>
                   }
                 />
@@ -243,7 +245,9 @@ function App() {
                 <Header
                   text={
                     <p className="header__text">
-                      <Link to="/sign-up">Зарегистрироваться</Link>
+                      <Link to="/sign-up" className="header__link">
+                        Зарегистрироваться
+                      </Link>
                     </p>
                   }
                 />
