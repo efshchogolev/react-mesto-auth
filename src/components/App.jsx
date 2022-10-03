@@ -75,7 +75,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    // setSelectedCard({ name: "", link: "" })///////////////////;
+    setSelectedCard({ name: "", link: "" });
     setIsRegisterPopupOpen(false);
     // setIsDeletePopupOpen(false);
   };
@@ -90,7 +90,7 @@ function App() {
       .then((data) => {
         setCurrentUser(data);
       })
-      .then(closeAllPopups())
+      .then(closeAllPopups)
       .catch((err) => console.log(err));
   };
 
@@ -187,6 +187,35 @@ function App() {
   return (
     <div className="root">
       <CurrentUserContext.Provider value={currentUser}>
+        <EditProfilePopup
+          onUpdateUser={handleUpdateUser}
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+        />
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          onAddCard={handleAddPlaceSubmit}
+        />
+
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
+
+        <PopupWithForm
+          title="Вы уверены?"
+          name="delete"
+          buttonText="Да"
+          onClose={closeAllPopups}
+        />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        <InfoTooltip
+          isOpen={isRegisterPopupOpen}
+          onClose={closeAllPopups}
+          success={registerPopupStatus}
+        />
         <Routes>
           <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
             <Route
@@ -211,30 +240,6 @@ function App() {
                     onEditAvatar={handleEditAvatarClick}
                   />
                   <Footer />
-                  <EditProfilePopup
-                    onUpdateUser={handleUpdateUser}
-                    isOpen={isEditProfilePopupOpen}
-                    onClose={closeAllPopups}
-                  />
-                  <AddPlacePopup
-                    isOpen={isAddPlacePopupOpen}
-                    onClose={closeAllPopups}
-                    onAddCard={handleAddPlaceSubmit}
-                  />
-
-                  <EditAvatarPopup
-                    isOpen={isEditAvatarPopupOpen}
-                    onClose={closeAllPopups}
-                    onUpdateAvatar={handleUpdateAvatar}
-                  />
-
-                  <PopupWithForm
-                    title="Вы уверены?"
-                    name="delete"
-                    buttonText="Да"
-                    onClose={closeAllPopups}
-                  />
-                  <ImagePopup card={selectedCard} onClose={closeAllPopups} />
                 </>
               }
             ></Route>
@@ -254,11 +259,6 @@ function App() {
                 <Register
                   onRegister={handleRegister}
                   onOpenPopup={handleOpenRegisterPopup}
-                />
-                <InfoTooltip
-                  isOpen={isRegisterPopupOpen}
-                  onClose={closeAllPopups}
-                  success={registerPopupStatus}
                 />
               </>
             }
