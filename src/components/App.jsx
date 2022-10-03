@@ -119,15 +119,7 @@ function App() {
     api
       .getCards()
       .then((data) => {
-        setCards(
-          data.map((item) => ({
-            name: item.name,
-            likes: item.likes,
-            link: item.link,
-            _id: item._id,
-            owner: item.owner,
-          }))
-        );
+        setCards(data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -189,6 +181,7 @@ function App() {
   return (
     <div className="root">
       <CurrentUserContext.Provider value={currentUser}>
+        <Header email={email} onLogout={handleLogout}></Header>
         <EditProfilePopup
           onUpdateUser={handleUpdateUser}
           isOpen={isEditProfilePopupOpen}
@@ -219,19 +212,12 @@ function App() {
           success={registerPopupStatus}
         />
         <Routes>
+          <Route path="/:url" element={<Header></Header>}></Route>
           <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
             <Route
               path="/"
               element={
                 <>
-                  <Header>
-                    <div className="header__container">
-                      <p className="header__email">{email}</p>
-                      <p className="header__text" onClick={handleLogout}>
-                        Выйти
-                      </p>
-                    </div>
-                  </Header>
                   <Main
                     cards={cards}
                     onCardLike={handleCardLike}
@@ -249,34 +235,9 @@ function App() {
 
           <Route
             path="/sign-up"
-            element={
-              <>
-                <Header>
-                  <p className="header__text">
-                    <Link to="/sign-in" className="header__link">
-                      Войти
-                    </Link>
-                  </p>{" "}
-                </Header>
-                <Register onRegister={handleRegister} />
-              </>
-            }
+            element={<Register onRegister={handleRegister} />}
           />
-          <Route
-            path="/sign-in"
-            element={
-              <>
-                <Header>
-                  <p className="header__text">
-                    <Link to="/sign-up" className="header__link">
-                      Регистрация
-                    </Link>
-                  </p>
-                </Header>
-                <Login onLogin={handleLogin} />
-              </>
-            }
-          />
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
         </Routes>
       </CurrentUserContext.Provider>
     </div>
