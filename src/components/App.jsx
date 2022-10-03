@@ -9,7 +9,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
@@ -30,13 +30,19 @@ function App() {
   const navigate = useNavigate();
 
   const handleLogin = (email, password) => {
-    return api.authorize(email, password).then((data) => {
-      if (!data.token) {
-        return Promise.reject("No data ");
-      }
-      localStorage.setItem("jwt", data.token);
-      setLoggedIn(true);
-    });
+    return api
+      .authorize(email, password)
+      .then((data) => {
+        if (!data.token) {
+          return Promise.reject("No data ");
+        }
+        localStorage.setItem("jwt", data.token);
+        setLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        handleOpenNotificationPopup(false);
+      });
   };
   const handleLogout = () => {
     localStorage.removeItem("jwt");
@@ -46,17 +52,17 @@ function App() {
   const handleRegister = (email, password) => {
     return api
       .register(email, password)
-      .then(handleOpenRegisterPopup(true))
+      .then(handleOpenNotificationPopup(true))
       .then(() => {
         navigate("/sign-up");
       })
       .catch((err) => {
-        handleOpenRegisterPopup(false);
+        handleOpenNotificationPopup(false);
         console.log(err);
       });
   };
 
-  const handleOpenRegisterPopup = (isSuccess) => {
+  const handleOpenNotificationPopup = (isSuccess) => {
     setIsRegisterPopupOpen(true);
     setRegisterPopupStatus(isSuccess);
   };
@@ -217,18 +223,15 @@ function App() {
             <Route
               path="/"
               element={
-                <>
-                  <Main
-                    cards={cards}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete}
-                    onCardClick={handleCardClick}
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onEditAvatar={handleEditAvatarClick}
-                  />
-                  <Footer />
-                </>
+                <Main
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  onCardClick={handleCardClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                />
               }
             ></Route>
           </Route>
@@ -239,6 +242,7 @@ function App() {
           />
           <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
         </Routes>
+        <Footer />
       </CurrentUserContext.Provider>
     </div>
   );

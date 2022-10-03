@@ -3,7 +3,6 @@ import logoPath from "../images/logo.svg";
 
 function Header(props) {
   const location = useLocation();
-  console.log(location.pathname);
   return (
     <header className="header">
       <img src={logoPath} className="header__logo" alt="Логотип Mesto" />
