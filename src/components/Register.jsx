@@ -15,13 +15,7 @@ function Register(props) {
     e.preventDefault();
     const { email, password } = state;
 
-    props
-      .onRegister(email, password)
-      .then(props.onOpenPopup(true))
-      .catch((err) => {
-        props.onOpenPopup(false);
-        console.log(err);
-      });
+    props.onRegister(email, password);
   };
 
   return (

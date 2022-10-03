@@ -25,7 +25,6 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
-  // const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
   // const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const navigate = useNavigate();
@@ -45,9 +44,16 @@ function App() {
   };
 
   const handleRegister = (email, password) => {
-    return api.register(email, password).then(() => {
-      navigate("/sign-up");
-    });
+    return api
+      .register(email, password)
+      .then(handleOpenRegisterPopup(true))
+      .then(() => {
+        navigate("/sign-up");
+      })
+      .catch((err) => {
+        handleOpenRegisterPopup(false);
+        console.log(err);
+      });
   };
 
   const handleOpenRegisterPopup = (isSuccess) => {
@@ -66,10 +72,6 @@ function App() {
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   };
-
-  // const handleSeccessPopupOpen = () => {
-  //   setIsSuccessPopupOpen(true)
-  // }
 
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(false);
@@ -256,10 +258,7 @@ function App() {
                     </Link>
                   </p>{" "}
                 </Header>
-                <Register
-                  onRegister={handleRegister}
-                  onOpenPopup={handleOpenRegisterPopup}
-                />
+                <Register onRegister={handleRegister} />
               </>
             }
           />
