@@ -25,4 +25,4 @@ _Проект создан для того, чтобы каждый мог по�
 
 ---
 
-Ссылка на GitHub Pages: https://efimgoldfinch.github.io/mesto-react/
+Ссылка на GitHub Pages: https://efshchogolev.github.io/react-mesto-auth/
